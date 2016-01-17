@@ -26,6 +26,7 @@ import static de.ovgu.featureide.fm.core.localization.StringTable.READING_MODEL_
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,8 +35,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.osgi.framework.BundleContext;
+import org.prop4j.Node;
+import org.prop4j.SolutionGenerator;
 
 import de.ovgu.featureide.fm.core.ExtendedFeatureModel.UsedModel;
+import de.ovgu.featureide.fm.core.configuration.Configuration;
+import de.ovgu.featureide.fm.core.editing.NodeCreator;
 import de.ovgu.featureide.fm.core.io.AbstractFeatureModelReader;
 import de.ovgu.featureide.fm.core.io.ModelIOFactory;
 import de.ovgu.featureide.fm.core.job.IJob;
@@ -196,4 +201,22 @@ public class FMCorePlugin extends AbstractCorePlugin {
 			logError(e);
 		}
 	}
+
+	public static List<List<String>> generateConfigurations(FeatureModel featureModel, Iterable<Configuration> configurations, int number) {
+		final Node fmNode = NodeCreator.createNodes(featureModel, false);
+		final SolutionGenerator gen = new SolutionGenerator(fmNode, 0);
+
+		if (configurations != null) {
+			for (Configuration configuration : configurations) {
+				gen.addSolution(configuration.getSelectedFeatureNames());
+			}
+		}
+
+		final List<List<String>> newConfigurations = new ArrayList<>();
+		while (number-- > 0 && gen.generateSolution()) {
+			newConfigurations.add(gen.getLastSolution());
+		}
+		return newConfigurations;
+	}
+
 }
