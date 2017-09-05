@@ -1,0 +1,378 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Donut Example</title>
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <link rel="stylesheet" type="text/css" href="http://www.toffeemilkshake.co.uk/tgp-ui-styles/ui-style.css">
+  <style>
+  .dashedLine{
+		stroke-width:5;
+		stroke:#000;
+		stroke-dasharray:5, 5;
+	}
+	.normalLine{
+		stroke-width:3;
+		stroke:#000;	
+	}
+  </style>
+  <body>
+ 
+    <script type="text/javascript">
+
+		var width = 1300;
+		var height = 850;
+		var pi = Math.PI;
+
+         var CENTRAL_NFP = "cost";
+        var FEATURE_NAMES11 = ["Feature1", "Feature2", "Feature3","Feature4","Feature5", "Feature6","F7","F8","F9","F10","F11","F12","F13","F14","F15"];
+    
+         var PREDICTIONS11 = [ 2.0,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.8,1,0.2,2.0];
+
+         var FORMALIZED_REQUIRES = [];
+         var FORMALIZED_EXCLUDES = [];
+          var NFP_VALUES = [];
+          var NFP = [];
+          var PREDICTIONS = [];
+          var FEATURE_NAMES = [];
+
+        var qualityCount = 0;
+		var quantityCount  = 0;
+         
+         // Override values
+         // DATA_HERE
+        
+         NFP = NFP.filter(Boolean);
+		 PREDICTIONS11 = PREDICTIONS11.map(Number);
+		
+
+		for(var i = 0; i< PREDICTIONS11.length;i++){
+		  if(PREDICTIONS11[i] === 2.0){
+		   PREDICTIONS= PREDICTIONS11.filter(function(i){ return i<2.0});
+		    
+		  }else{
+		    FEATURE_NAMES.push(FEATURE_NAMES11[i]);
+		    
+		  }
+		}
+	    var NFPLength =  NFP.length;
+        var FPLength = FEATURE_NAMES.length ;
+         quantityCount = parseInt(quantityCount);		
+        
+         qualityCount = NFPLength-quantityCount; 
+        var endAngleFP = FPLength*(360/(FPLength+NFPLength));
+         var quantityAngle = quantityCount*(360/(FPLength+NFPLength));
+         var endAngleQuantity = quantityAngle+endAngleFP 
+         var qualityAngle = qualityCount*(360/(FPLength+NFPLength));
+         var endAngleQuality = qualityAngle+endAngleQuantity;
+
+         var NODE_RADIUS = 10;
+         var p=0,rad=0;
+         var adjustLength=0,count=0,angle=0,circleCenter=[];
+         var centerX=0,centerY=0;
+          var rotation = 0;
+          var length = NFPLength+FPLength;
+     
+         if( length !== 0){
+               rotation = 360/length;
+          } else {
+          	  rotation = 0;
+          	  endAngleFP = 180;
+          	  endAngleQuantity = 270;
+          	  endAngleQuality = 360;
+          }
+          
+
+		var arcs = [
+		       {"color":"#E6B9B8","startAngle":0,"endAngle":endAngleFP,"radius":256},
+			   
+			   {"color":"#695185","startAngle":0,"endAngle":endAngleFP,"radius":225},
+			   {"color":"#7C609E","startAngle":0,"endAngle":endAngleFP,"radius":198},  
+			   {"color":"#927AAE","startAngle":0,"endAngle":endAngleFP,"radius":170},
+			   {"color":"#A594BC","startAngle":0,"endAngle":endAngleFP,"radius":142},
+			   {"color":"#BFB1CF","startAngle":0,"endAngle":endAngleFP,"radius":114},
+			   {"color":"#D3C8DE","startAngle":0,"endAngle":endAngleFP,"radius":86},
+			   
+			   {"color":"#B9CDE5","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":256},
+				   
+			  
+			   {"color":"#695185","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":225},
+			   {"color":"#7C609E","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":198},
+			   {"color":"#927AAE","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":170},
+			   {"color":"#A594BC","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":142},
+			   {"color":"#BFB1CF","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":114},
+			   {"color":"#D3C8DE","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":86},
+			   
+			   {"color":"#B7DEE8","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":256},
+			  
+			   {"color":"#695185","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":225},
+			   {"color":"#7C609E","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":198},
+			   {"color":"#927AAE","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":170},
+			   {"color":"#A594BC","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":142},
+			   {"color":"#BFB1CF","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":114},
+			   {"color":"#D3C8DE","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":86}
+		];
+		var degree = Math.PI / 180; // just to convert the radian-numbers
+		var rectangleData = [
+                    { "rx": 170, "ry": 649, "height": 22, "width": 30, "color" : "#E6B9B8" },
+                    { "rx": 170, "ry": 676, "height": 22, "width": 30, "color" : "#B9CDE5" },
+					{ "rx": 170, "ry": 704, "height": 22, "width": 30, "color" : "#B7DEE8" },
+					{ "rx": 1050, "ry": 306, "height": 250, "width": 240, "color" : "#fff" },
+					
+					{ "rx": 1075, "ry": 363, "height": 23, "width": 25, "color" : "#D3C8DE" },
+					{ "rx": 1075, "ry": 390, "height": 23, "width": 25, "color" : "#BFB1CF" },
+					{ "rx": 1075, "ry": 417, "height": 23, "width": 25, "color" : "#A594BC" },
+					{ "rx": 1075, "ry": 444, "height": 23, "width": 25, "color" : "#927AAE" },
+					{ "rx": 1075, "ry": 471, "height": 23, "width": 25, "color" : "#7C609E" },
+					{ "rx": 1075, "ry": 498, "height": 23, "width": 25, "color" : "#695185" },
+					
+					{ "rx": 1236, "ry": 363, "height": 23, "width": 25, "color" : "#FEF9D6" },
+					{ "rx": 1236, "ry": 390, "height": 23, "width": 25, "color" : "#FDF3AD" },
+					{ "rx": 1236, "ry": 417, "height": 23, "width": 25, "color" : "#FBEB75" },
+					{ "rx": 1236, "ry": 444, "height": 23, "width": 25, "color" : "#F8DF24" },
+					{ "rx": 1236, "ry": 471, "height": 23, "width": 25, "color" : "#D9C007" },
+					{ "rx": 1236, "ry": 498, "height": 23, "width": 25, "color" : "#BCA600" },
+					];
+					
+		var legends = [
+		                {"name":"Funtional Features","x":208,"y":667,"size":"20px"},
+						{"name":"Quantitative NFPs","x":208,"y":694,"size":"20px"},
+						{"name":"Qualitative NFPs","x":208,"y":722,"size":"20px"},
+						{"name":"Zones","x":1050,"y":290,"size":"20px"},
+						{"name":"NFP","x":1065,"y":330,"size":"15px"},
+						{"name":"values","x":1060,"y":347,"size":"15px"},
+						{"name":"Feature","x":1216,"y":330,"size":"15px"},
+						{"name":"scores","x":1219,"y":347,"size":"15px"},
+						{"name":"Positive","x":1134,"y":378,"size":"15px"},
+						{"name":"Negative","x":1134,"y":514,"size":"15px"}
+					  ];
+					  
+		// Appending SVG to the body
+		var svg = d3.select("body").append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.on('click', function() {
+			  console.log( d3.mouse(this) ) // log the mouse position
+			});
+
+		// Container for the arcs
+		var curves = svg.append("g")
+			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")").on('click', function() {
+			  console.log( d3.mouse(this) ) // log the mouse position
+			});
+			
+	 	  
+      
+		// Appending the data to each path i.e arc 
+		curves.selectAll("path")
+			.data(arcs)
+			.enter().append("path")
+			.each(arcFunction);
+			
+
+		// Function called for each path appended to increase scale and iterate.
+		function arcFunction(d, i) {
+			var pathArc = d3.svg.arc()
+				.innerRadius(function(d){return d.radius-25;})
+				.outerRadius(function(d){return d.radius;})
+				.startAngle(function(d){return d.startAngle * degree;})
+				.endAngle(function(d){return d.endAngle * degree;})
+				.padAngle(0.02);
+
+			return d3.select(this)
+				.style("fill", function(d){return d.color;})
+				.attr("d", pathArc);
+		}
+     var rectangles = svg.selectAll("rect")
+                               .data(rectangleData)
+                               .enter()
+                               .append("rect");
+
+     var rectangleAttributes = rectangles
+                            .attr("x", function (d) { return d.rx; })
+                            .attr("y", function (d) { return d.ry; })
+                            .attr("height", function (d) { return d.height; })
+                            .attr("width", function (d) { return d.width; })
+                            .attr("fill", function(d) { return d.color; })
+							.attr("stroke", "black");
+							
+	  var notation = svg.selectAll("text")
+							  .data(legends)
+							  .enter()
+							  .append("text");
+							  
+		var legendsAttributes = notation.attr('x', function (d) { return d.x; } )
+								  .attr('y', function (d) { return d.y; })
+								  .attr("text-anchor", "start")
+								  .text(function (d) { return d.name; })
+								  .attr("font-family", "sans-serif")
+                                  .attr("font-size", function (d) { return d.size; });
+								  
+		var lines = [{"x1":1158,"y1":387,"x2":1158,"y2":492,"class":"dashedLine"},
+	                 {"x1":1144,"y1":482,"x2":1158,"y2":497,"class":"normalLine"},
+					  {"x1":1169,"y1":482,"x2":1158,"y2":499,"class":"normalLine"}
+		            ];
+		var drawLine = svg.selectAll('line').data(lines).enter().append("line");
+		var lineAttributes = drawLine.attr("x1", function (d) { return d.x1; })
+								 .attr("x2", function (d) { return d.x2; })
+								 .attr("y1", function (d) { return d.y1; })
+								 .attr("y2", function (d) { return d.y2; })
+								 .attr("class",function (d) { return d.class; });
+
+      curves.append("text")
+		  .attr('y', 0)
+		  .attr('x', -20)
+		  .text(CENTRAL_NFP);	
+    
+
+   insertProps( FEATURE_NAMES, PREDICTIONS );    
+   p = 0;
+  insertProps( NFP, NFP_VALUES ); 
+ 
+
+   function insertProps(nodes,propsValues) {   
+   
+      for (var i = 0; i < nodes.length; i++) {
+
+      	        var val = propsValues[i]; 
+
+					if(val>=0 && val<=0.17) {
+                        if(nodes == FEATURE_NAMES) {
+                        circleCenter = createCenter(212,nodes,15,1,0.7,1,-1);
+                        } else {
+                         circleCenter = createCenter(212,nodes,25,0.5,0.5,-1,-1);
+                        }
+                      
+					} else if ( val>0.17 && val<=0.34 ) {
+					  if(nodes == FEATURE_NAMES) {
+					      circleCenter = createCenter(186,nodes,15,1,0.7,1,-1);
+					   } else {
+                         circleCenter = createCenter(186,nodes,25,0.5,0.5,-1,-1);
+                        }
+					
+					} else if ( val>0.34 && val<=0.51 ) {
+                       if(nodes == FEATURE_NAMES) {
+					     circleCenter = createCenter(158,nodes,15,1,0.7,1,-1); 
+					    } else {
+                         circleCenter = createCenter(158,nodes,25,0.5,0.5,-1,-1);
+                        }
+					} else if ( val>0.51 && val<=0.68 ) {
+	                   if(nodes == FEATURE_NAMES) {
+					    circleCenter = createCenter(130,nodes,15,1,0.7,1,-1);  
+					   } else {
+                         circleCenter = createCenter(130,nodes,25,0.5,0.5,-1,-1);
+                        }
+					} else if ( val>0.68 && val<=0.85 ) {
+						if(nodes == FEATURE_NAMES) {
+					     circleCenter = createCenter(102,nodes,15,1,0.7,1,-1);
+					    }else {
+                         circleCenter = createCenter(102,nodes,25,0.5,0.5,-1,-1);
+                        }
+					} else {
+				      if(nodes == FEATURE_NAMES) {
+					   circleCenter = createCenter(74,nodes,15,1,0.7,1,-1); 
+					  } else {
+                         circleCenter = createCenter(74,nodes,25,0.5,0.5,-1,-1);
+                        }
+					} 
+			    if(nodes == FEATURE_NAMES) {
+                    centerX= circleCenter[0]; 
+                    centerY = circleCenter[1]; 
+                    insertData(centerX,centerY,"white","black","start",nodes,nodes[i],12,8,'black');
+                } else {
+                    centerX= circleCenter[0]; 
+                    centerY= circleCenter[1];  
+
+                   insertData(centerX,centerY,"white","black","end",nodes,nodes[i],-16,2,'black');
+                 }
+               					
+		};
+	 
+   }	
+
+
+  function createCenter(rad,numNodes,len,val,mul,locationX,locationY) {
+		     	      if( p==0){
+                         adjustLength= len;
+                         t=0;
+                       } else {
+                         adjustLength=0;
+                         t=0;
+                       }
+                   
+
+                  	   if( numNodes === NFP ) {
+                  	   	rotation =  rotation +2;
+                  	   	 angle = p*(Math.PI/180)*rotation;
+		                 //angle = (p / 11*val) * Math.PI*mul; 
+                        centerX = (rad * Math.sin(angle)+adjustLength)*locationX;
+                        centerY = (rad * Math.cos(angle)+t)*locationY ; 
+                         console.log(centerX,centerY);
+                        rotation = rotation-2;
+                  	   }else {
+                         rotation=  rotation +1;
+                  	     angle = p*(Math.PI/180)*rotation;
+		                 //angle = (p / 11*val) * Math.PI*mul; 
+                        centerX = (rad * Math.sin(angle)+adjustLength)*locationX;
+                        centerY = (rad * Math.cos(angle)+t)*locationY ; 
+
+                  	     rotation--;
+                  	   	}
+		                
+                   
+                  p+=1; 
+                return [centerX,centerY];         
+
+   }
+   var textAngle = -3;
+   function insertData(cx,cy,fillColor,borderColor,anchor,nodes,propertyName,x,y,color) {
+
+
+   	           var props = FEATURE_NAMES.concat(NFP);
+                  if(cx !== 0){
+					curves.append("circle")
+					  .attr('cy', cy)
+					  .attr('cx', cx)
+					  .attr('r', 6)
+					  .style("fill",fillColor)
+					  .style("stroke",borderColor);
+
+				   curves
+				      .append("text")
+					  .attr("x", cx+x)
+                      .attr("y", cy+y)
+					  .text(propertyName)
+					  .attr("transform", "rotate(-1)")
+					  .style("text-anchor", anchor)
+					  .style('fill', color);
+					 } 
+					
+					count++;
+					textAngle+=3;
+               
+                if(FEATURE_NAMES.indexOf(propertyName) > -1){
+					  insertConstraints(cx,cy,propertyName);
+				}	  
+
+	}
+               
+    function insertConstraints(cx,cy,propertyName) {
+		        if(FORMALIZED_REQUIRES.indexOf(propertyName) > -1){
+				        
+					 curves.append("circle")
+							  .attr('cy', cy)
+							  .attr('cx', cx)
+							  .attr('r', 5.5)
+							  .style("fill","green");				
+				}
+				if(FORMALIZED_EXCLUDES.indexOf(propertyName) > -1){
+				      curves.append("circle")
+								.attr('cy', cy)
+								.attr('cx', cx)
+								.attr('r', 5.5)
+								.style("fill","red");				  
+				}
+	}  	 
+    </script>
+  </body>
+</html>
