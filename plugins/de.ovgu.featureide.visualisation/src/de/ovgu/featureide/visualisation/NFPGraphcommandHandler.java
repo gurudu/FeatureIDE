@@ -24,6 +24,12 @@ import de.ovgu.featureide.core.CorePlugin;
 import de.ovgu.featureide.core.IFeatureProject;
 import de.ovgu.featureide.fm.ui.handlers.base.ASelectionHandler;
 
+/**
+ * NFPGraph command handler
+ * 
+ * @author Hari Kumar Gurudu
+ */
+
 public class NonFunctionalPropertyGraphCommandHandler extends ASelectionHandler {
 	
 	public static int NFPInteractions = 0;
