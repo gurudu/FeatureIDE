@@ -1,273 +1,364 @@
-<!DOCTYPE HTML>
 <html>
   <head>
-    <style>
-      body {
-        margin: 0px;
-        padding: 0px;
-      }
-    </style>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Donut Example</title>
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
   </head>
-    <body>
+  <link rel="stylesheet" type="text/css" href="http://www.toffeemilkshake.co.uk/tgp-ui-styles/ui-style.css">
+  <style>
+  .dashedLine{
+		stroke-width:5;
+		stroke:#000;
+		stroke-dasharray:5, 5;
+	}
+	.normalLine{
+		stroke-width:3;
+		stroke:#000;	
+	}
+  </style>
+  <body>
+ 
+    <script type="text/javascript">
 
-    <canvas id="myCanvas" width="800" height="700"></canvas>
-    <script>
+		var width = 1300;
+		var height = 850;
+		var pi = Math.PI;
 
-      var NODE_RADIUS = 10;
-      var NODE_DIAMETER = NODE_RADIUS * 2;
+         var CENTRAL_FEATURE = "FeatureC";
+        var FEATURE_NAMES = ["Feature1", "Feature2", "Feature3","Feature4","Feature5", "Feature6","F7","F8","F9","F10","F11","F12","F13","F14","F15"];
+    
+        var PREDICTIONS = [ 0,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.8,1,0.2,0.2];
+         var FORMALIZED_REQUIRES = ["Feature1"];
+         var FORMALIZED_EXCLUDES = ["Feature4"];
+        
+         var NFP_VALUES = [];
+          var NFP = [];
 
-var EXCLUDES_ZONE = 250;
-var REQUIRES_ZONE = 60;
-var DISCOURAGES_ZONE = EXCLUDES_ZONE - 20;
-var MIDDLE_ZONE = DISCOURAGES_ZONE - EXCLUDES_ZONE/4;
-var ENCOURAGES_ZONE = REQUIRES_ZONE + EXCLUDES_ZONE/4;
-var CENTER_ZONE = REQUIRES_ZONE - NODE_DIAMETER;
+        var qualityCount = 0;
+		var quantityCount  =0;
+         
+         // Override values
+         // DATA_HERE
+        
+         NFP = NFP.filter(Boolean);
+		 PREDICTIONS = PREDICTIONS.map(Number);
+		 var NFPLength =  NFP.length;
+        var FPLength = FEATURE_NAMES.length ;
+         quantityCount = parseInt(quantityCount);		
+        
+         qualityCount = NFPLength-quantityCount; 
+        var endAngleFP = FPLength*(360/(FPLength+NFPLength));
+         var quantityAngle = quantityCount*(360/(FPLength+NFPLength));
+         var endAngleQuantity = quantityAngle+endAngleFP 
+         var qualityAngle = qualityCount*(360/(FPLength+NFPLength));
+         var endAngleQuality = qualityAngle+endAngleQuantity;
 
-var EXCLUDES_COLOR = "rgb(255, 0, 0)";
-var REQUIRES_COLOR = "rgb(19, 166, 50)";
-var ENCOURAGES_COLOR = "rgb(179, 202, 157)";
-var DISCOURAGES_COLOR = "rgb(242, 178, 103)";
-var MIDDLE_COLOR = "rgb(255, 255, 255)";
+         var NODE_RADIUS = 10;
+         var p=0,rad=0;
+         var adjustLength=0,count=0,angle=0,circleCenter=[];
+         var centerX=0,centerY=0;
+          var rotation = 0;
+          var length = NFPLength+FPLength;
+     
+         if( length !== 0){
+               rotation = 360/length;
+          } else {
+          	  rotation = 0;
+          	  endAngleFP = 180;
+          	  endAngleQuantity = 270;
+          	  endAngleQuality = 360;
+          }
+          
 
-      var canvas = document.getElementById('myCanvas');
-      var context = canvas.getContext('2d');
-      var centerX = canvas.width / 2;
-      var centerY = canvas.height / 2;
+		var arcs = [
+		       {"color":"#E6B9B8","startAngle":0,"endAngle":endAngleFP,"radius":256},
+			   
+			   {"color":"#BCA600","startAngle":0,"endAngle":endAngleFP,"radius":225},
+			   {"color":"#D9C007","startAngle":0,"endAngle":endAngleFP,"radius":198},  
+			   {"color":"#F8DF24","startAngle":0,"endAngle":endAngleFP,"radius":170},
+			   {"color":"#FBEB75","startAngle":0,"endAngle":endAngleFP,"radius":142},
+			   {"color":"#FDF3AD","startAngle":0,"endAngle":endAngleFP,"radius":114},
+			   {"color":"#FEF9D6","startAngle":0,"endAngle":endAngleFP,"radius":86},
+			   
+			   {"color":"#B9CDE5","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":256},
+				   
+			  
+			   {"color":"#695185","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":225},
+			   {"color":"#7C609E","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":198},
+			   {"color":"#927AAE","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":170},
+			   {"color":"#A594BC","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":142},
+			   {"color":"#BFB1CF","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":114},
+			   {"color":"#D3C8DE","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":86},
+			   
+			   {"color":"#B7DEE8","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":256},
+			  
+			   {"color":"#695185","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":225},
+			   {"color":"#7C609E","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":198},
+			   {"color":"#927AAE","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":170},
+			   {"color":"#A594BC","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":142},
+			   {"color":"#BFB1CF","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":114},
+			   {"color":"#D3C8DE","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":86}
+		];
+		var degree = Math.PI / 180; // just to convert the radian-numbers
+		var rectangleData = [
+                    { "rx": 170, "ry": 649, "height": 22, "width": 30, "color" : "#E6B9B8" },
+                    { "rx": 170, "ry": 676, "height": 22, "width": 30, "color" : "#B9CDE5" },
+					{ "rx": 170, "ry": 704, "height": 22, "width": 30, "color" : "#B7DEE8" },
+					{ "rx": 1050, "ry": 306, "height": 250, "width": 240, "color" : "#fff" },
+					
+					{ "rx": 1075, "ry": 363, "height": 23, "width": 25, "color" : "#D3C8DE" },
+					{ "rx": 1075, "ry": 390, "height": 23, "width": 25, "color" : "#BFB1CF" },
+					{ "rx": 1075, "ry": 417, "height": 23, "width": 25, "color" : "#A594BC" },
+					{ "rx": 1075, "ry": 444, "height": 23, "width": 25, "color" : "#927AAE" },
+					{ "rx": 1075, "ry": 471, "height": 23, "width": 25, "color" : "#7C609E" },
+					{ "rx": 1075, "ry": 498, "height": 23, "width": 25, "color" : "#695185" },
+					
+					{ "rx": 1236, "ry": 363, "height": 23, "width": 25, "color" : "#FEF9D6" },
+					{ "rx": 1236, "ry": 390, "height": 23, "width": 25, "color" : "#FDF3AD" },
+					{ "rx": 1236, "ry": 417, "height": 23, "width": 25, "color" : "#FBEB75" },
+					{ "rx": 1236, "ry": 444, "height": 23, "width": 25, "color" : "#F8DF24" },
+					{ "rx": 1236, "ry": 471, "height": 23, "width": 25, "color" : "#D9C007" },
+					{ "rx": 1236, "ry": 498, "height": 23, "width": 25, "color" : "#BCA600" },
+					];
+					
+		var legends = [
+		                {"name":"Funtional Features","x":208,"y":667,"size":"20px"},
+						{"name":"Quantitative NFPs","x":208,"y":694,"size":"20px"},
+						{"name":"Qualitative NFPs","x":208,"y":722,"size":"20px"},
+						{"name":"Zones","x":1050,"y":290,"size":"20px"},
+						{"name":"NFP","x":1065,"y":330,"size":"15px"},
+						{"name":"values","x":1060,"y":347,"size":"15px"},
+						{"name":"Feature","x":1216,"y":330,"size":"15px"},
+						{"name":"scores","x":1219,"y":347,"size":"15px"},
+						{"name":"Positive","x":1134,"y":378,"size":"15px"},
+						{"name":"Negative","x":1134,"y":514,"size":"15px"}
+					  ];
+					  
+		// Appending SVG to the body
+		var svg = d3.select("body").append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.on('click', function() {
+			  console.log( d3.mouse(this) ) // log the mouse position
+			});
 
-var CENTRAL_FEATURE = "FeatureC";
-var FEATURE_NAMES = ["Feature1", "Feature2", "Feature3", "Feature4", "Feature5", "Feature6"];
-var GIVEN = [1, 0.99, 0.66, 0.5, 0.01, 0];
-var FORMALIZED_REQUIRES = ["Feature1"];
-var FORMALIZED_EXCLUDES = [];
-// Override values
-// DATA_HERE
-
-var NUMBER_OF_FEATURES = FEATURE_NAMES.length;
-
-context.save();
-      context.translate(canvas.width / 2, canvas.height / 2);
-      context.strokeStyle = '#000000';
-
-      // Excludes zone
-      context.beginPath();
-      context.arc(0, 0, EXCLUDES_ZONE, 0, 2 * Math.PI, false);
-      context.fillStyle = EXCLUDES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
-
-      // Discourages zone
-      context.beginPath();
-      context.arc(0, 0, DISCOURAGES_ZONE, 0, 2 * Math.PI, false);
-      context.fillStyle = DISCOURAGES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
-
-      // Fade from middle to discourage
-      context.beginPath();
-      context.arc(0, 0, MIDDLE_ZONE + NODE_RADIUS, 0, 2 * Math.PI, false);
-      var grd2 = context.createRadialGradient(0, 0, MIDDLE_ZONE, 0, 0, MIDDLE_ZONE + NODE_RADIUS);
-      grd2.addColorStop(0, MIDDLE_COLOR);
-      grd2.addColorStop(1, DISCOURAGES_COLOR);
-      context.fillStyle = grd2;
-      context.fill();
-      context.lineWidth = 1;
-
-      // Middle zone
-      context.beginPath();
-      context.arc(0, 0, MIDDLE_ZONE, 0, 2 * Math.PI, false);
-      context.fillStyle = MIDDLE_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-
-      // Encourages zone
-      context.beginPath();
-      context.arc(0, 0, ENCOURAGES_ZONE, 0, 2 * Math.PI, false);
-      var grd = context.createRadialGradient(0, 0, ENCOURAGES_ZONE - NODE_RADIUS, 0, 0, ENCOURAGES_ZONE);
-      grd.addColorStop(0, ENCOURAGES_COLOR);
-      grd.addColorStop(1, 'white');
-      context.fillStyle = grd;
-      context.fill();
-      context.lineWidth = 1;
-
-
-      // Requires zone
-      context.beginPath();
-      context.arc(0, 0, REQUIRES_ZONE, 0, 2 * Math.PI, false);
-      context.fillStyle = REQUIRES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
-
-      // Central
-      context.beginPath();
-      context.arc(0, 0, CENTER_ZONE, 0, 2 * Math.PI, false);
-      context.fillStyle = 'white';
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
+		// Container for the arcs
+		var curves = svg.append("g")
+			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")").on('click', function() {
+			  console.log( d3.mouse(this) ) // log the mouse position
+			});
+			
+	 	  
       
-      // Text of central features
-      var centralName = CENTRAL_FEATURE;
-      context.font = '11pt Calibri';
-      var metrics = context.measureText(centralName);
-      var width = metrics.width;
+		// Appending the data to each path i.e arc 
+		curves.selectAll("path")
+			.data(arcs)
+			.enter().append("path")
+			.each(arcFunction);
+			
 
-      context.fillStyle = 'black';
-      context.fillText(centralName, -width/2, 0);
+		// Function called for each path appended to increase scale and iterate.
+		function arcFunction(d, i) {
+			var pathArc = d3.svg.arc()
+				.innerRadius(function(d){return d.radius-25;})
+				.outerRadius(function(d){return d.radius;})
+				.startAngle(function(d){return d.startAngle * degree;})
+				.endAngle(function(d){return d.endAngle * degree;})
+				.padAngle(0.02);
 
-      var rotateRadio = Math.PI * 2 /(NUMBER_OF_FEATURES);
-      var currentRotation = 0;
+			return d3.select(this)
+				.style("fill", function(d){return d.color;})
+				.attr("d", pathArc);
+		}
+     var rectangles = svg.selectAll("rect")
+                               .data(rectangleData)
+                               .enter()
+                               .append("rect");
 
-      for (var i = 0; i < NUMBER_OF_FEATURES; i++) {
-      var fiPosition = 100;
-      if(GIVEN[i]==0){
-         fiPosition = EXCLUDES_ZONE - NODE_RADIUS;
-      } else if (GIVEN[i]==1){
-         fiPosition = REQUIRES_ZONE - NODE_RADIUS;
-      } else {
-         var totalSpace = (EXCLUDES_ZONE - NODE_RADIUS*3) - (REQUIRES_ZONE + NODE_RADIUS);
-         fiPosition = REQUIRES_ZONE + NODE_RADIUS + ((1-GIVEN[i]) * totalSpace);
-      }
-      context.beginPath();
-      context.arc(fiPosition, 0, NODE_RADIUS, 0, 2 * Math.PI, false);
-      context.fillStyle = 'white';
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
-      
-            if(FORMALIZED_REQUIRES.indexOf(FEATURE_NAMES[i]) > -1){
-context.beginPath();
-              context.arc(fiPosition, 0, NODE_RADIUS - 4, 0, 2 * Math.PI, false);
-context.fillStyle = REQUIRES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
-      }
+     var rectangleAttributes = rectangles
+                            .attr("x", function (d) { return d.rx; })
+                            .attr("y", function (d) { return d.ry; })
+                            .attr("height", function (d) { return d.height; })
+                            .attr("width", function (d) { return d.width; })
+                            .attr("fill", function(d) { return d.color; })
+							.attr("stroke", "black");
+							
+	  var notation = svg.selectAll("text")
+							  .data(legends)
+							  .enter()
+							  .append("text");
+							  
+		var legendsAttributes = notation.attr('x', function (d) { return d.x; } )
+								  .attr('y', function (d) { return d.y; })
+								  .attr("text-anchor", "start")
+								  .text(function (d) { return d.name; })
+								  .attr("font-family", "sans-serif")
+                                  .attr("font-size", function (d) { return d.size; });
+								  
+		var lines = [{"x1":1158,"y1":387,"x2":1158,"y2":492,"class":"dashedLine"},
+	                 {"x1":1144,"y1":482,"x2":1158,"y2":497,"class":"normalLine"},
+					  {"x1":1169,"y1":482,"x2":1158,"y2":499,"class":"normalLine"}
+		            ];
+		var drawLine = svg.selectAll('line').data(lines).enter().append("line");
+		var lineAttributes = drawLine.attr("x1", function (d) { return d.x1; })
+								 .attr("x2", function (d) { return d.x2; })
+								 .attr("y1", function (d) { return d.y1; })
+								 .attr("y2", function (d) { return d.y2; })
+								 .attr("class",function (d) { return d.class; });
+
+      curves.append("text")
+		  .attr('y', 0)
+		  .attr('x', -20)
+		  .text(CENTRAL_FEATURE);	
+    
+
+   insertProps( FEATURE_NAMES, PREDICTIONS );    
+   p = 0;
+  insertProps( NFP, NFP_VALUES ); 
+ 
+
+   function insertProps(nodes,propsValues) {   
+   
+      for (var i = 0; i < nodes.length; i++) {
+
+      	        var val = propsValues[i]; 
+
+					if(val>=0 && val<=0.17) {
+                        if(nodes == FEATURE_NAMES) {
+                        circleCenter = createCenter(212,nodes,15,1,0.7,1,-1);
+                        } else {
+                         circleCenter = createCenter(212,nodes,25,0.5,0.5,-1,-1);
+                        }
+                      
+					} else if ( val>0.17 && val<=0.34 ) {
+					  if(nodes == FEATURE_NAMES) {
+					      circleCenter = createCenter(186,nodes,15,1,0.7,1,-1);
+					   } else {
+                         circleCenter = createCenter(186,nodes,25,0.5,0.5,-1,-1);
+                        }
+					
+					} else if ( val>0.34 && val<=0.51 ) {
+                       if(nodes == FEATURE_NAMES) {
+					     circleCenter = createCenter(158,nodes,15,1,0.7,1,-1); 
+					    } else {
+                         circleCenter = createCenter(158,nodes,25,0.5,0.5,-1,-1);
+                        }
+					} else if ( val>0.51 && val<=0.68 ) {
+	                   if(nodes == FEATURE_NAMES) {
+					    circleCenter = createCenter(130,nodes,15,1,0.7,1,-1);  
+					   } else {
+                         circleCenter = createCenter(130,nodes,25,0.5,0.5,-1,-1);
+                        }
+					} else if ( val>0.68 && val<=0.85 ) {
+						if(nodes == FEATURE_NAMES) {
+					     circleCenter = createCenter(102,nodes,15,1,0.7,1,-1);
+					    }else {
+                         circleCenter = createCenter(102,nodes,25,0.5,0.5,-1,-1);
+                        }
+					} else {
+				      if(nodes == FEATURE_NAMES) {
+					   circleCenter = createCenter(74,nodes,15,1,0.7,1,-1); 
+					  } else {
+                         circleCenter = createCenter(74,nodes,25,0.5,0.5,-1,-1);
+                        }
+					} 
+			    if(nodes == FEATURE_NAMES) {
+                    centerX= circleCenter[0]; 
+                    centerY = circleCenter[1];  
+                   insertData(centerX,centerY,"white","black","start",nodes,nodes[i],12,8);
+                } else {
+                    centerX= circleCenter[0]; 
+                    centerY= circleCenter[1];  
+
+                   insertData(centerX,centerY,"white","black","end",nodes,nodes[i],-16,2);
+                 }
+               					
+		};
+	 
+   }	
 
 
-      if(FORMALIZED_EXCLUDES.indexOf(FEATURE_NAMES[i]) > -1){
-context.beginPath();
-              context.arc(fiPosition, 0, NODE_RADIUS - 4, 0, 2 * Math.PI, false);
-context.fillStyle = EXCLUDES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
-      }
+  function createCenter(rad,numNodes,len,val,mul,locationX,locationY) {
+		     	      if( p==0){
+                         adjustLength= len;
+                         t=0;
+                       } else {
+                         adjustLength=0;
+                         t=0;
+                       }
+                   
 
-      // line
-      context.beginPath();
-      context.moveTo(CENTER_ZONE, 0);
-      context.lineTo(fiPosition - NODE_RADIUS, 0);
-      context.stroke();      
+                  	   if( numNodes === NFP ) {
+                  	   	rotation =  rotation +2;
+                  	   	 angle = p*(Math.PI/180)*rotation;
+		                 //angle = (p / 11*val) * Math.PI*mul; 
+                        centerX = (rad * Math.sin(angle)+adjustLength)*locationX;
+                        centerY = (rad * Math.cos(angle)+t)*locationY ; 
+                         console.log(centerX,centerY);
+                        rotation = rotation-2;
+                  	   }else {
+                         rotation=  rotation +1;
+                  	     angle = p*(Math.PI/180)*rotation;
+		                 //angle = (p / 11*val) * Math.PI*mul; 
+                        centerX = (rad * Math.sin(angle)+adjustLength)*locationX;
+                        centerY = (rad * Math.cos(angle)+t)*locationY ; 
 
-      // feature name
-context.fillStyle = 'black';
-     if (currentRotation>Math.PI/2 && currentRotation<Math.PI/2*3) {
-      context.save();
-//context.translate(fiPosition, 0);
-var metrics = context.measureText(FEATURE_NAMES[i]);
-      var width = metrics.width;
+                  	     rotation--;
+                  	   	}
+		                
+                   
+                  p+=1; 
+                return [centerX,centerY];         
 
-      context.rotate(Math.PI);
-      context.fillText(FEATURE_NAMES[i], -(fiPosition + width + NODE_DIAMETER), 0);
-      context.restore();
-      } else {
-
-        context.fillText(FEATURE_NAMES[i], fiPosition + NODE_DIAMETER, 0);
-      }
-      currentRotation += rotateRadio;
-      context.rotate(rotateRadio);
-      }
-
-context.restore();
-
-// Legend
-context.translate(canvas.width - 100, canvas.height - 180);
-var LEGEND_ITEM = 15;
-var y = 5;
-context.fillStyle = 'black';
-context.font = '11pt Calibri';
-context.fillText("Relation types", 0, 0);
-y += LEGEND_ITEM + 5;
-context.fillText("Formalized", NODE_RADIUS * 2 + 5, y);
+   }
+   var textAngle = -3;
+   function insertData(cx,cy,fillColor,borderColor,anchor,nodes,propertyName,x,y) {
 
 
-	context.beginPath();
-      context.arc(NODE_RADIUS, y -NODE_RADIUS/2 , NODE_RADIUS, 0, 2 * Math.PI, false);
-      context.fillStyle = 'white';
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
-      
-      context.beginPath();
-      context.arc(NODE_RADIUS, y - NODE_RADIUS/2, NODE_RADIUS - 4, 0, 2 * Math.PI, false);
-context.fillStyle = 'grey';
-      context.fill();
-      context.lineWidth = 1;
-      context.stroke();
+   	           var props = FEATURE_NAMES.concat(NFP);
 
-y += LEGEND_ITEM + 15;
+					curves.append("circle")
+					  .attr('cy', cy)
+					  .attr('cx', cx)
+					  .attr('r', 6)
+					  .style("fill",fillColor)
+					  .style("stroke",borderColor);
 
+				   curves
+				      .append("text")
+					  .attr("x", cx+x)
+                      .attr("y", cy+y)
+					  .text(propertyName)
+					  .attr("transform", "rotate(-1)")
+					  .style("text-anchor", anchor);
+					  
+					
+					count++;
+					textAngle+=3;
+               
+                if(FEATURE_NAMES.indexOf(propertyName) > -1){
+					  insertConstraints(cx,cy,propertyName);
+				}	  
 
-context.fillStyle = 'black';
-context.fillText("Zones", 0, y);
- 	y += LEGEND_ITEM;
-      context.beginPath();
-      context.rect(0, y, LEGEND_ITEM, LEGEND_ITEM);
-      context.fillStyle = REQUIRES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.strokeStyle = 'black';
-      context.stroke();
-      context.fillStyle = 'black';
-      context.fillText("Requires", LEGEND_ITEM + 5, LEGEND_ITEM + y);
-
-      y += LEGEND_ITEM + 5;
-      context.beginPath();
-      context.rect(0, y, LEGEND_ITEM, LEGEND_ITEM);
-      context.fillStyle = ENCOURAGES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.strokeStyle = 'black';
-      context.stroke();
-      context.fillStyle = 'black';
-      context.fillText("Encourages", LEGEND_ITEM + 5, LEGEND_ITEM + y);
-
-      y += LEGEND_ITEM + 5;
-      context.beginPath();
-      context.rect(0, y, LEGEND_ITEM, LEGEND_ITEM);
-      context.fillStyle = MIDDLE_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.strokeStyle = 'black';
-      context.stroke();
-      context.fillStyle = 'black';
-      context.fillText("Independent", LEGEND_ITEM + 5, LEGEND_ITEM + y);
-
-      y += LEGEND_ITEM + 5;
-      context.beginPath();
-      context.rect(0, y, LEGEND_ITEM, LEGEND_ITEM);
-      context.fillStyle = DISCOURAGES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.strokeStyle = 'black';
-      context.stroke();
-      context.fillStyle = 'black';
-      context.fillText("Discourages", LEGEND_ITEM + 5, LEGEND_ITEM + y);
-
-      y += LEGEND_ITEM + 5;
-      context.beginPath();
-      context.rect(0, y, LEGEND_ITEM, LEGEND_ITEM);
-      context.fillStyle = EXCLUDES_COLOR;
-      context.fill();
-      context.lineWidth = 1;
-      context.strokeStyle = 'black';
-      context.stroke();
-      context.fillStyle = 'black';
-      context.fillText("Excludes", LEGEND_ITEM + 5, LEGEND_ITEM + y);
-
+	}
+               
+    function insertConstraints(cx,cy,propertyName) {
+		        if(FORMALIZED_REQUIRES.indexOf(propertyName) > -1){
+				        
+					 curves.append("circle")
+							  .attr('cy', cy)
+							  .attr('cx', cx)
+							  .attr('r', 5.5)
+							  .style("fill","green");				
+				}
+				if(FORMALIZED_EXCLUDES.indexOf(propertyName) > -1){
+				      curves.append("circle")
+								.attr('cy', cy)
+								.attr('cx', cx)
+								.attr('r', 5.5)
+								.style("fill","red");				  
+				}
+	}  	 
     </script>
   </body>
 </html>
