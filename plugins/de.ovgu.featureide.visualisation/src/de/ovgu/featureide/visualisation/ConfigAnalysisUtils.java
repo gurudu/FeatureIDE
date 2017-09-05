@@ -102,10 +102,6 @@ public class ConfigAnalysisUtils {
 	        // Get formalized constraints, implies and excludes
 	 		List<String> formalizedRequires = new ArrayList<String>();
 	 		List<String> formalizedExcludes = new ArrayList<String>();
-	 		/*List<String> formalizedRequires11 = new ArrayList<String>();
-	 		List<String> formalizedExcludes11 = new ArrayList<String>();
-	 		List<String> formalizedRequires22 = new ArrayList<String>();
-	 		List<String> formalizedExcludes22 = new ArrayList<String>();*/
 	 		FeatureDependencies fd = new FeatureDependencies(featureModel);
 	 		for (IFeature f : fd.always(fc)) {
 	 			formalizedRequires.add(f.getName());
@@ -128,33 +124,7 @@ public class ConfigAnalysisUtils {
 					childF.add((IFeature) next);	
 		        }
 			}
-	    /*formalizedRequires11.addAll(formalizedRequires);
-	    formalizedExcludes11.addAll(formalizedExcludes);
-		for(IFeature f:HiddenF){
-			formalizedRequires11.remove(f.getName());
-			formalizedExcludes11.remove(f.getName());
-		}
-			
-		for(IFeature f:coreF){
-			formalizedRequires11.remove(f.getName());
-			formalizedExcludes11.remove(f.getName());
-		}
-	
-		try{
-		for(String s:formalizedRequires11 ) {
-        	IFeature fi = featureModel.getFeature(s);
-        	for (IFeature f : fd.always(fi)) {
-	 			formalizedRequires22.add(f.getName());
-	 		}
-	 		for (IFeature f : fd.never(fi)) {
-	 			formalizedExcludes22.add(f.getName());
-	 		}
-		}
-		}catch(ConcurrentModificationException ignored){
-			
-		}
-		formalizedRequires.addAll(formalizedRequires22);
-		formalizedExcludes.addAll(formalizedExcludes22);*/
+	   
 		for(String s : formalizedRequires){
 			if(!relatedFeatures.contains(s)){
 				relatedFeatures.add(s);
