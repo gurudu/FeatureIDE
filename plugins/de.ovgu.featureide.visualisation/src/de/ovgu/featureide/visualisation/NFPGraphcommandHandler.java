@@ -120,7 +120,7 @@ public class NonFunctionalPropertyGraphCommandHandler extends ASelectionHandler 
 		    }
 		    data.append("];\n");
 		
-		File fi = Utils.getFileFromPlugin("de.ovgu.featureide.visualisation", "template/NFP/NFP.html");
+		File fi = Utils.getFileFromPlugin("de.ovgu.featureide.visualisation", "template/NFP.html");
 		String html = Utils.getStringOfFile(fi);
 		html = html.replaceFirst("// DATA_HERE", data.toString());
 	// Open the browser
