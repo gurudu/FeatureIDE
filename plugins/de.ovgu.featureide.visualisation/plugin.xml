@@ -18,7 +18,12 @@
 				</visibleWhen>
             <command
                   commandId="de.ovgu.featureide.visualisation.command.featurerelations"
-                  label="Feature Relations Graph"
+                  label="Feature's Graph"
+                  style="push">
+            </command>
+            <command
+                  commandId="de.ovgu.featureide.visualisation.command.nfp"
+                  label="Non-Functional Property's Graph"
                   style="push">
             </command>
          </menu>
@@ -29,7 +34,12 @@
       <command
             defaultHandler="de.ovgu.featureide.visualisation.ShowFeatureRelationsGraphCommandHandler"
             id="de.ovgu.featureide.visualisation.command.featurerelations"
-            name="Feature Relations Graph">
+            name="Feature's Graph">
+      </command>
+       <command
+            defaultHandler="de.ovgu.featureide.visualisation.NonFunctionalPropertyGraphCommandHandler"
+            id="de.ovgu.featureide.visualisation.command.nfp"
+            name="Non-Functional Property's Graph">
       </command>
    </extension>
 
