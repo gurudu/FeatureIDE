@@ -7,10 +7,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
@@ -20,7 +18,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import de.ovgu.featureide.core.CorePlugin;
 import de.ovgu.featureide.core.IFeatureProject;
 import de.ovgu.featureide.fm.ui.handlers.base.ASelectionHandler;
 
@@ -30,7 +27,7 @@ import de.ovgu.featureide.fm.ui.handlers.base.ASelectionHandler;
  * @author Hari Kumar Gurudu
  */
 
-public class NonFunctionalPropertyGraphCommandHandler extends ASelectionHandler {
+public class NFPGraphcommandHandler extends ASelectionHandler {
 	
 	public static int NFPInteractions = 0;
 	//static Thread thread;
@@ -41,7 +38,7 @@ public class NonFunctionalPropertyGraphCommandHandler extends ASelectionHandler 
 	@Override
 	public void singleAction(Object element) {
 	    //if(featureProject != null){
-		Shell shell22 = new Shell(Display.findDisplay(NonFunctionalPropertyGraphCommandHandler.thread));
+		Shell shell22 = new Shell(Display.findDisplay(NFPGraphcommandHandler.thread));
 	   
 		shell22.setText("Select a NFP");
 		shell22.setSize(400, 200);
@@ -64,7 +61,7 @@ public class NonFunctionalPropertyGraphCommandHandler extends ASelectionHandler 
 				int count = 0;
 				int[] selections = list11.getSelectionIndices();
 				try {
-					count = NonFunctionalPropertyGraphCommandHandler.showNFPGraph(featureProject,list11.getItem(selections[0]));
+					count = NFPGraphcommandHandler.showNFPGraph(featureProject,list11.getItem(selections[0]));
 					 PrintWriter writer = new PrintWriter("FPGInteractions.txt", "UTF-8");
 					 writer.println(count);
 					 writer.close();

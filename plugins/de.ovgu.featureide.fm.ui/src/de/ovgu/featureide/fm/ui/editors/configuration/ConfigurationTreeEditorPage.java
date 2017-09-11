@@ -32,6 +32,11 @@ import static de.ovgu.featureide.fm.core.localization.StringTable.THE_FEATURE_MO
 import static de.ovgu.featureide.fm.core.localization.StringTable.THE_GIVEN_FEATURE_MODEL;
 import static de.ovgu.featureide.fm.core.localization.StringTable.VALID_COMMA_;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -180,6 +185,87 @@ public abstract class ConfigurationTreeEditorPage extends EditorPart implements 
 	private Menu menu;
 	private ToolItem dropDownMenu;
 
+	private static class UserDecision {
+		private final long time;
+		private final Selection selection;
+		private final SelectableFeature feature;
+
+		public UserDecision(long time, Selection selection, SelectableFeature feature) {
+			super();
+			this.time = time;
+			this.selection = selection;
+			this.feature = feature;
+		}
+
+		public long getTime() {
+			return time;
+		}
+
+		public Selection getSelection() {
+			return selection;
+		}
+
+		public SelectableFeature getFeature() {
+			return feature;
+		}
+
+		@Override
+		public String toString() {
+			return "UserDecision [time=" + time + ", selection=" + selection + ", feature=" + feature + "]";
+		}
+
+	}
+
+	private final List<UserDecision> decisions = new ArrayList<>();
+	{
+		resetStatistic();
+	}
+
+	private void resetStatistic() {
+		decisions.clear();
+		decisions.add(new UserDecision(System.currentTimeMillis(), null, null));
+	}
+
+	private void printStatistic() {
+		if (!decisions.isEmpty()) {
+			long timeNeeded = decisions.get(decisions.size() - 1).getTime() - decisions.get(0).getTime();
+			int countSelections = 0;
+			int countDeselections = 0;
+			int countUndefined = 0;
+			final List<String> decisionDetails = new ArrayList<>(decisions.size() - 1);
+			for (UserDecision userDecision : decisions) {
+				if (userDecision.getSelection() != null) {
+					switch (userDecision.getSelection()) {
+					case SELECTED:
+						countSelections++;
+						break;
+					case UNSELECTED:
+						countDeselections++;
+						break;
+					case UNDEFINED:
+						countUndefined++;
+						break;
+					}
+					final String details = userDecision.toString();
+					decisionDetails.add(details);
+					System.out.println(details);
+				}
+			}
+			
+			// TODO: use the values in the evaluation?
+			// ...
+			
+			// TODO: write values to file?, just replace <path> with actual path to output file
+//			try {
+//				Files.write(Paths.get("<path>"), decisionDetails, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+			
+			System.out.println(timeNeeded + " | " + countSelections + " | " + countDeselections + " | " + countUndefined);
+		}
+	}
+
 	public void setDirty() {
 		dirty = true;
 		firePropertyChange(PROP_DIRTY);
@@ -305,6 +391,22 @@ public abstract class ConfigurationTreeEditorPage extends EditorPart implements 
 		new ToolItem(toolbar, SWT.SEPARATOR);
 
 		ToolItem item = new ToolItem(toolbar, SWT.PUSH);
+		item.setText(" Reset Statistics");
+		item.setToolTipText("Reset Configuration Process");
+		item.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				printStatistic();
+				resetStatistic();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		new ToolItem(toolbar, SWT.SEPARATOR);
+
+		item = new ToolItem(toolbar, SWT.PUSH);
 		item.setImage(IMAGE_COLLAPSE);
 		item.setToolTipText("Collapse All Features");
 		item.addSelectionListener(new SelectionListener() {
@@ -609,6 +711,7 @@ public abstract class ConfigurationTreeEditorPage extends EditorPart implements 
 
 	protected void set(SelectableFeature feature, Selection selection) {
 		configurationEditor.getConfiguration().setManual(feature, selection);
+		decisions.add(new UserDecision(System.currentTimeMillis(), selection, feature));
 	}
 
 	protected void changeSelection(final TreeItem item, final boolean select) {
