@@ -58,14 +58,18 @@ public class ShowFeatureRelationsGraphCommandHandler extends ASelectionHandler {
 		for (String f : featureList) {
 			list.add(f);
 		}
-        
+		ConfigAnalysisUtils.eval(featureProject);
 		list.addSelectionListener(new SelectionListener() {
 			
 			public void widgetSelected(SelectionEvent event) {
 				int count = 0;
 				int[] selections = list.getSelectionIndices();
 				try {
-					 count = showFrog(featureProject, list.getItem(selections[0]));
+					long startTime = System.currentTimeMillis();
+					count = showFrog(featureProject, list.getItem(selections[0]));
+					long endTime = System.currentTimeMillis();
+					System.out.println("That Feature's Graph took " + (endTime - startTime) + " milliseconds");
+					 
 					
 					 PrintWriter writer = new PrintWriter("FPGInteractions.txt", "UTF-8");
 					 writer.println(count);
@@ -197,7 +201,7 @@ public class ShowFeatureRelationsGraphCommandHandler extends ASelectionHandler {
 		File fi = Utils.getFileFromPlugin("de.ovgu.featureide.visualisation", "template/featureRelations/page.html");
 		String html = Utils.getStringOfFile(fi);
 		html = html.replaceFirst("// DATA_HERE", data.toString());
-       System.out.println("data id "+data.toString());
+       //System.out.println("data id "+data.toString());
 		// Open the browser
       
 		Shell shell = new Shell(Display.getCurrent());

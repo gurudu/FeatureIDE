@@ -3,10 +3,15 @@ package de.ovgu.featureide.visualisation;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -18,6 +23,7 @@ import de.ovgu.featureide.fm.core.base.IFeature;
 import de.ovgu.featureide.fm.core.base.IFeatureModel;
 import de.ovgu.featureide.fm.core.configuration.Configuration;
 import de.ovgu.featureide.fm.core.configuration.DefaultFormat;
+import de.ovgu.featureide.fm.core.configuration.Selection;
 import de.ovgu.featureide.fm.core.io.manager.FileHandler;
 
 /**
@@ -102,10 +108,6 @@ public class ConfigAnalysisUtils {
 	        // Get formalized constraints, implies and excludes
 	 		List<String> formalizedRequires = new ArrayList<String>();
 	 		List<String> formalizedExcludes = new ArrayList<String>();
-	 		/*List<String> formalizedRequires11 = new ArrayList<String>();
-	 		List<String> formalizedExcludes11 = new ArrayList<String>();
-	 		List<String> formalizedRequires22 = new ArrayList<String>();
-	 		List<String> formalizedExcludes22 = new ArrayList<String>();*/
 	 		FeatureDependencies fd = new FeatureDependencies(featureModel);
 	 		for (IFeature f : fd.always(fc)) {
 	 			formalizedRequires.add(f.getName());
@@ -115,7 +117,6 @@ public class ConfigAnalysisUtils {
 	 		}
 	 	
 		List<String> relatedFeatures = computeWidgetFeatures(featureProject);
-		  List<String> relatedFeatures11 = new ArrayList<>();
 	    List<IFeature> childF = new ArrayList<>();
 		List<IFeature> HiddenF = configuration.getUnSelectedFeatures();
 		List<IFeature> coreF = FeatureUtils.getAnalyser(featureModel).getCoreFeatures();
@@ -128,33 +129,7 @@ public class ConfigAnalysisUtils {
 					childF.add((IFeature) next);	
 		        }
 			}
-	    /*formalizedRequires11.addAll(formalizedRequires);
-	    formalizedExcludes11.addAll(formalizedExcludes);
-		for(IFeature f:HiddenF){
-			formalizedRequires11.remove(f.getName());
-			formalizedExcludes11.remove(f.getName());
-		}
-			
-		for(IFeature f:coreF){
-			formalizedRequires11.remove(f.getName());
-			formalizedExcludes11.remove(f.getName());
-		}
-	
-		try{
-		for(String s:formalizedRequires11 ) {
-        	IFeature fi = featureModel.getFeature(s);
-        	for (IFeature f : fd.always(fi)) {
-	 			formalizedRequires22.add(f.getName());
-	 		}
-	 		for (IFeature f : fd.never(fi)) {
-	 			formalizedExcludes22.add(f.getName());
-	 		}
-		}
-		}catch(ConcurrentModificationException ignored){
-			
-		}
-		formalizedRequires.addAll(formalizedRequires22);
-		formalizedExcludes.addAll(formalizedExcludes22);*/
+	  
 		for(String s : formalizedRequires){
 			if(!relatedFeatures.contains(s)){
 				relatedFeatures.add(s);
@@ -187,9 +162,10 @@ public class ConfigAnalysisUtils {
 			}
 			
 		}
-		
-		
-		return new Object[]{relatedFeatures,formalizedRequires,formalizedExcludes};
+		Set<String> stringSet = new HashSet<>(relatedFeatures);
+		String[] relatedFeatures11 = stringSet.toArray(new String[0]);
+	    List<String> relatedFeatures12 = Arrays.asList(relatedFeatures11);
+		return new Object[]{relatedFeatures12,formalizedRequires,formalizedExcludes};
 		
 	}
 	
@@ -218,5 +194,50 @@ public class ConfigAnalysisUtils {
 			widgetFeatures.add(f.getName());
 		}
 		return widgetFeatures;
+	}
+	
+	public static int eval(IFeatureProject featureProject) {
+		IFeatureModel featureModel = featureProject.getFeatureModel();
+		Configuration configuration = new Configuration(featureModel);
+		configuration.update();
+		int currentValue = 0;
+		int lastValue = 0;
+		int maxValue = 0;
+		while (true) {
+			List<String> widgetFeatures = new ArrayList<>();
+			List<IFeature> childF = new ArrayList<>();
+			List<IFeature> unselectedFeatures = configuration.getUndefinedSelectedFeatures();
+			for (IFeature f : unselectedFeatures) {
+				Iterable<IFeature> j = (Iterable<IFeature>) FeatureUtils.getChildren(f).iterator();
+				if (FeatureUtils.hasChildren(f)) {
+					for (; ((Iterator<IFeature>) j).hasNext();) {
+						Object next = ((Iterator<IFeature>) j).next();
+						childF.add((IFeature) next);
+					}
+				}
+
+			}
+			unselectedFeatures.removeAll(childF);
+			for (IFeature f : unselectedFeatures) {
+				widgetFeatures.add(f.getName());
+			}
+			
+			if (widgetFeatures.isEmpty()) {
+				break;
+			}
+			
+			String name = widgetFeatures.get(new Random().nextInt(widgetFeatures.size()));
+		    Object[] relatedF	= getRelatedFeatures(featureProject, name);
+			List<String> relatedFeatures = (List<String>)relatedF[0];
+			Object[] NFPCenter = NFProps.computeNFP(featureProject,name);
+			List<String> NFP = (List<String>)NFPCenter[0];
+			currentValue = NFP.size() + relatedFeatures.size();
+		    maxValue  = (currentValue > lastValue) ? currentValue : lastValue;
+		    System.out.println("currentValue is "+currentValue+" lastValue is "+lastValue+" maxValue is"+maxValue);
+			configuration.setManual(name, Selection.SELECTED);
+			configuration.update();
+			lastValue = maxValue;
+		}
+     return maxValue;
 	}
 }

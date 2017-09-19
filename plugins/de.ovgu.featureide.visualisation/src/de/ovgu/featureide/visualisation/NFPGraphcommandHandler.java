@@ -32,7 +32,7 @@ public class NFPGraphcommandHandler extends ASelectionHandler {
 	public static int NFPInteractions = 0;
 	//static Thread thread;
 	public static Thread thread;
-	public static String featureCenter =  ShowFeatureRelationsGraphCommandHandler.featureC;;
+	public static String featureCenter =  ShowFeatureRelationsGraphCommandHandler.featureC;
 	public IFeatureProject featureProject = ShowFeatureRelationsGraphCommandHandler.fProject;
 	
 	@Override
@@ -61,8 +61,11 @@ public class NFPGraphcommandHandler extends ASelectionHandler {
 				int count = 0;
 				int[] selections = list11.getSelectionIndices();
 				try {
+					long startTime = System.currentTimeMillis();
 					count = NFPGraphcommandHandler.showNFPGraph(featureProject,list11.getItem(selections[0]));
-					 PrintWriter writer = new PrintWriter("FPGInteractions.txt", "UTF-8");
+					long endTime = System.currentTimeMillis();
+					System.out.println("That NFP Graph took " + (endTime - startTime) + " milliseconds"); 
+					PrintWriter writer = new PrintWriter("FPGInteractions.txt", "UTF-8");
 					 writer.println(count);
 					 writer.close();
 					 System.out.println(" Number of Non-Functional property's graph interactions = "+count);

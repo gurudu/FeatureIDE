@@ -37,7 +37,7 @@
             name="Feature's Graph">
       </command>
        <command
-            defaultHandler="de.ovgu.featureide.visualisation.NonFunctionalPropertyGraphCommandHandler"
+            defaultHandler="de.ovgu.featureide.visualisation.NFPGraphcommandHandler"
             id="de.ovgu.featureide.visualisation.command.nfp"
             name="Non-Functional Property's Graph">
       </command>
