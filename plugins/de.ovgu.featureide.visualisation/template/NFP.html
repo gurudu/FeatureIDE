@@ -27,7 +27,7 @@
          var CENTRAL_NFP = "cost";
         var FEATURE_NAMES11 = ["Feature1", "Feature2", "Feature3","Feature4","Feature5", "Feature6","F7","F8","F9","F10","F11","F12","F13","F14","F15"];
     
-         var PREDICTIONS11 = [ 2.0,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.8,1,0.2,2.0];
+         var PREDICTIONS11 = [ 2.0,0.2,0.25,0.3,0.354455256,0.4,0.45,0.5,0.55,0.6,0.65,0.8,1,0.2,2.0];
 
          var FORMALIZED_REQUIRES = [];
          var FORMALIZED_EXCLUDES = [];
@@ -45,14 +45,15 @@
          NFP = NFP.filter(Boolean);
 		 PREDICTIONS11 = PREDICTIONS11.map(Number);
 		
-
+        //PREDICTIONS11= PREDICTIONS11.map(function(i) { return i.toFixed(2));
+        PREDICTIONS11 = PREDICTIONS11.map(Number);
 		for(var i = 0; i< PREDICTIONS11.length;i++){
 		  if(PREDICTIONS11[i] === 2.0){
 		   PREDICTIONS= PREDICTIONS11.filter(function(i){ return i<2.0});
 		    
 		  }else{
 		    FEATURE_NAMES.push(FEATURE_NAMES11[i]);
-		    
+		    PREDICTIONS.push(PREDICTIONS11[i]);
 		  }
 		}
 	    var NFPLength =  NFP.length;
@@ -84,14 +85,14 @@
           
 
 		var arcs = [
-		       {"color":"#E6B9B8","startAngle":0,"endAngle":endAngleFP,"radius":256},
+		       {"color":"#A9D18E","startAngle":0,"endAngle":endAngleFP,"radius":256},
 			   
-			   {"color":"#695185","startAngle":0,"endAngle":endAngleFP,"radius":225},
-			   {"color":"#7C609E","startAngle":0,"endAngle":endAngleFP,"radius":198},  
-			   {"color":"#927AAE","startAngle":0,"endAngle":endAngleFP,"radius":170},
-			   {"color":"#A594BC","startAngle":0,"endAngle":endAngleFP,"radius":142},
-			   {"color":"#BFB1CF","startAngle":0,"endAngle":endAngleFP,"radius":114},
-			   {"color":"#D3C8DE","startAngle":0,"endAngle":endAngleFP,"radius":86},
+			   {"color":"#4674C6","startAngle":0,"endAngle":endAngleFP,"radius":225},
+			   {"color":"#5B84CD","startAngle":0,"endAngle":endAngleFP,"radius":198},  
+			   {"color":"#7597D5","startAngle":0,"endAngle":endAngleFP,"radius":170},
+			   {"color":"#86A4DA","startAngle":0,"endAngle":endAngleFP,"radius":142},
+			   {"color":"#A1B9E3","startAngle":0,"endAngle":endAngleFP,"radius":114},
+			   {"color":"#B8CAEA","startAngle":0,"endAngle":endAngleFP,"radius":86},
 			   
 			   {"color":"#B9CDE5","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":256},
 				   
@@ -226,8 +227,8 @@
     
 
    insertProps( FEATURE_NAMES, PREDICTIONS );    
-   p = 0;
-  insertProps( NFP, NFP_VALUES ); 
+   //p = 0;
+  //insertProps( NFP, NFP_VALUES ); 
  
 
    function insertProps(nodes,propsValues) {   

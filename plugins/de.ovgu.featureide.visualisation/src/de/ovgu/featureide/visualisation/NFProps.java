@@ -14,6 +14,7 @@ import de.ovgu.featureide.core.IFeatureProject;
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
 import de.ovgu.featureide.fm.core.base.IFeature;
 import de.ovgu.featureide.fm.core.base.IFeatureModel;
+import de.ovgu.featureide.fm.core.configuration.Configuration;
 
 
 /**
@@ -59,14 +60,15 @@ public class NFProps {
 	public static List<Double> NFPGraphFeatures(IFeatureProject featureProject, String featureCenter,String nfpCenter) throws CoreException{
 	   
 	   HashMap<String, List<Double>> nfPropsHash = new HashMap<>();
-	   
+
+		
 	   List<Double> valueList = null;
 	   Object[] featurePredicts = ConfigAnalysisUtils.getRelatedFeatures(featureProject,featureCenter);
 	   List<String> relatedFeatures = (List<String>)featurePredicts[0];
 	   List<Double> featuresNFPValues = new ArrayList<>();
 	   List<String> featuresNFP = new ArrayList<>();
-	   relatedFeatures.add(featureCenter);
-	   System.out.println("relatedFeatures list"+relatedFeatures);
+	   //relatedFeatures.add(featureCenter);
+	  // System.out.println("relatedFeatures list"+relatedFeatures);
 	   for(String f : relatedFeatures){
 		   Object[] nfProperties = computeNFP(featureProject,f);
 		   List<String> nfp = (List<String>)nfProperties[0]; 
@@ -107,12 +109,12 @@ public class NFProps {
 		   if(key.equals(nfpCenter)){
 			   featuresNFPValues.addAll(nfPropsHash.get(key));
 		   }
-		   System.out.println(nfPropsHash.get(key));
+		   //System.out.println(nfPropsHash.get(key));
 	   }
 	
 	 
-	  System.out.println("featuresNFPValues ..."+featuresNFPValues);
-	  System.out.println("featuresNFP.."+featuresNFP);
+	  //System.out.println("featuresNFPValues ..."+featuresNFPValues);
+	  //System.out.println("featuresNFP.."+featuresNFP);
 		return featuresNFPValues;
 	}
 	
@@ -188,7 +190,7 @@ public class NFProps {
 			Collections.sort(NFPHash.get(key));
 			keyWithMinMax.put(key, NFPHash.get(key).get(0)+"-"+(NFPHash.get(key).size()==1 ?  NFPHash.get(key).get(0) : NFPHash.get(key).get(NFPHash.get(key).size()-1)));
 		}
-		System.out.println(keyWithMinMax);
+		//System.out.println(keyWithMinMax);
 		return keyWithMinMax;
 	  }		
 }

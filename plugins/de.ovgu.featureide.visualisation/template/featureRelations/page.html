@@ -69,41 +69,40 @@
           	  endAngleQuality = 360;
           }
           
+   var arcs = [
+		       {"color":"#A9D18E","startAngle":0,"endAngle":endAngleFP,"radius":256+56},
 
-		var arcs = [
-		       {"color":"#E6B9B8","startAngle":0,"endAngle":endAngleFP,"radius":256},
-			   
-			   {"color":"#BCA600","startAngle":0,"endAngle":endAngleFP,"radius":225},
-			   {"color":"#D9C007","startAngle":0,"endAngle":endAngleFP,"radius":198},  
-			   {"color":"#F8DF24","startAngle":0,"endAngle":endAngleFP,"radius":170},
-			   {"color":"#FBEB75","startAngle":0,"endAngle":endAngleFP,"radius":142},
-			   {"color":"#FDF3AD","startAngle":0,"endAngle":endAngleFP,"radius":114},
-			   {"color":"#FEF9D6","startAngle":0,"endAngle":endAngleFP,"radius":86},
-			   
-			   {"color":"#B9CDE5","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":256},
-				   
-			  
-			   {"color":"#695185","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":225},
-			   {"color":"#7C609E","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":198},
-			   {"color":"#927AAE","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":170},
-			   {"color":"#A594BC","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":142},
-			   {"color":"#BFB1CF","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":114},
-			   {"color":"#D3C8DE","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":86},
-			   
-			   {"color":"#B7DEE8","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":256},
-			  
-			   {"color":"#695185","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":225},
-			   {"color":"#7C609E","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":198},
-			   {"color":"#927AAE","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":170},
-			   {"color":"#A594BC","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":142},
-			   {"color":"#BFB1CF","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":114},
-			   {"color":"#D3C8DE","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":86}
+			   {"color":"#BCA600","startAngle":0,"endAngle":endAngleFP,"radius":225+56},
+			   {"color":"#D9C007","startAngle":0,"endAngle":endAngleFP,"radius":198+56},
+			   {"color":"#F8DF24","startAngle":0,"endAngle":endAngleFP,"radius":170+56},
+			   {"color":"#FBEB75","startAngle":0,"endAngle":endAngleFP,"radius":142+56},
+			   {"color":"#FDF3AD","startAngle":0,"endAngle":endAngleFP,"radius":114+56},
+			   {"color":"#FEF9D6","startAngle":0,"endAngle":endAngleFP,"radius":86+56},
+
+			   {"color":"#C5E0B4","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":256+56},
+
+
+			   {"color":"#4674C6","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":225+56},
+			   {"color":"#5B84CD","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":198+56},
+			   {"color":"#7597D5","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":170+56},
+			   {"color":"#86A4DA","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":142+56},
+			   {"color":"#A1B9E3","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":114+56},
+			   {"color":"#B8CAEA","startAngle":endAngleFP,"endAngle":endAngleQuantity,"radius":86+56},
+
+			   {"color":"#E2F0D9","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":256+56},
+
+			   {"color":"#4674C6","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":225+56},
+			   {"color":"#5B84CD","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":198+56},
+			   {"color":"#7597D5","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":170+56},
+			   {"color":"#86A4DA","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":142+56},
+			   {"color":"#A1B9E3","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":114+56},
+			   {"color":"#B8CAEA","startAngle":endAngleQuantity,"endAngle":endAngleQuality,"radius":86+56}
 		];
 		var degree = Math.PI / 180; // just to convert the radian-numbers
 		var rectangleData = [
-                    { "rx": 170, "ry": 649, "height": 22, "width": 30, "color" : "#E6B9B8" },
-                    { "rx": 170, "ry": 676, "height": 22, "width": 30, "color" : "#B9CDE5" },
-					{ "rx": 170, "ry": 704, "height": 22, "width": 30, "color" : "#B7DEE8" },
+                    { "rx": 170, "ry": 649, "height": 22, "width": 30, "color" : "#A9D18E" },
+                    { "rx": 170, "ry": 676, "height": 22, "width": 30, "color" : "#C5E0B4" },
+					{ "rx": 170, "ry": 704, "height": 22, "width": 30, "color" : "#E2F0D9" },
 					{ "rx": 1050, "ry": 306, "height": 250, "width": 240, "color" : "#fff" },
 					
 					{ "rx": 1075, "ry": 363, "height": 23, "width": 25, "color" : "#D3C8DE" },
@@ -123,8 +122,8 @@
 					
 		var legends = [
 		                {"name":"Funtional Features","x":208,"y":667,"size":"20px"},
-						{"name":"Quantitative NFPs","x":208,"y":694,"size":"20px"},
-						{"name":"Qualitative NFPs","x":208,"y":722,"size":"20px"},
+						{"name":"Qualitative NFPs","x":208,"y":694,"size":"20px"},
+						{"name":"Quantitative NFPs","x":208,"y":722,"size":"20px"},
 						{"name":"Zones","x":1050,"y":290,"size":"20px"},
 						{"name":"NFP","x":1065,"y":330,"size":"15px"},
 						{"name":"values","x":1060,"y":347,"size":"15px"},
@@ -206,10 +205,33 @@
 								 .attr("y2", function (d) { return d.y2; })
 								 .attr("class",function (d) { return d.class; });
 
+     var txt2 = "";
+	var txt1 ="";
+	  if(CENTRAL_FEATURE.length>11){
+	        txt1=CENTRAL_FEATURE.slice(0,7);
+	        txt1 += "-"
+	        txt2=CENTRAL_FEATURE.slice(7,CENTRAL_FEATURE.length);
+	     curves.append("text")
+		  .attr('y', 0)
+		  .attr('x', -35)
+		  .text(txt1)
+		  .attr("font-size", "18px")
+		  .attr("font-weight", "bold");
+		   curves.append("text")
+		  .attr('y', 18)
+		  .attr('x', -35)
+		  .text(txt2)
+		  .attr("font-size", "18px")
+		  .attr("font-weight", "bold");
+	   } else {
       curves.append("text")
 		  .attr('y', 0)
-		  .attr('x', -20)
-		  .text(CENTRAL_FEATURE);	
+		  .attr('x', -35)
+		  .text(CENTRAL_FEATURE)
+		  .attr("font-size", "18px")
+		  .attr("font-weight", "bold");
+
+    }		  
     
 
    insertProps( FEATURE_NAMES, PREDICTIONS );    
@@ -225,41 +247,41 @@
 
 					if(val>=0 && val<=0.17) {
                         if(nodes == FEATURE_NAMES) {
-                        circleCenter = createCenter(212,nodes,15,1,0.7,1,-1);
+                        circleCenter = createCenter(212+56,nodes,15,1,0.7,1,-1);
                         } else {
-                         circleCenter = createCenter(212,nodes,25,0.5,0.5,-1,-1);
+                         circleCenter = createCenter(212+56,nodes,25,0.5,0.5,-1,-1);
                         }
                       
 					} else if ( val>0.17 && val<=0.34 ) {
 					  if(nodes == FEATURE_NAMES) {
-					      circleCenter = createCenter(186,nodes,15,1,0.7,1,-1);
+					      circleCenter = createCenter(186+56,nodes,15,1,0.7,1,-1);
 					   } else {
-                         circleCenter = createCenter(186,nodes,25,0.5,0.5,-1,-1);
+                         circleCenter = createCenter(186+56,nodes,25,0.5,0.5,-1,-1);
                         }
 					
 					} else if ( val>0.34 && val<=0.51 ) {
                        if(nodes == FEATURE_NAMES) {
-					     circleCenter = createCenter(158,nodes,15,1,0.7,1,-1); 
+					     circleCenter = createCenter(158+56,nodes,15,1,0.7,1,-1); 
 					    } else {
-                         circleCenter = createCenter(158,nodes,25,0.5,0.5,-1,-1);
+                         circleCenter = createCenter(158+56,nodes,25,0.5,0.5,-1,-1);
                         }
 					} else if ( val>0.51 && val<=0.68 ) {
 	                   if(nodes == FEATURE_NAMES) {
-					    circleCenter = createCenter(130,nodes,15,1,0.7,1,-1);  
+					    circleCenter = createCenter(130+56,nodes,15,1,0.7,1,-1);  
 					   } else {
-                         circleCenter = createCenter(130,nodes,25,0.5,0.5,-1,-1);
+                         circleCenter = createCenter(130+56,nodes,25,0.5,0.5,-1,-1);
                         }
 					} else if ( val>0.68 && val<=0.85 ) {
 						if(nodes == FEATURE_NAMES) {
-					     circleCenter = createCenter(102,nodes,15,1,0.7,1,-1);
+					     circleCenter = createCenter(102+56,nodes,15,1,0.7,1,-1);
 					    }else {
-                         circleCenter = createCenter(102,nodes,25,0.5,0.5,-1,-1);
+                         circleCenter = createCenter(102+56,nodes,25,0.5,0.5,-1,-1);
                         }
 					} else {
 				      if(nodes == FEATURE_NAMES) {
-					   circleCenter = createCenter(74,nodes,15,1,0.7,1,-1); 
+					   circleCenter = createCenter(74+56,nodes,15,1,0.7,1,-1); 
 					  } else {
-                         circleCenter = createCenter(74,nodes,25,0.5,0.5,-1,-1);
+                         circleCenter = createCenter(74+56,nodes,25,0.5,0.5,-1,-1);
                         }
 					} 
 			    if(nodes == FEATURE_NAMES) {

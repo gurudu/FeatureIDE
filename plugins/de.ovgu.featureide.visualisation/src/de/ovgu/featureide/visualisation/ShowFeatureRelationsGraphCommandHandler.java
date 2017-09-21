@@ -23,6 +23,9 @@ import de.ovgu.featureide.core.IFeatureProject;
 import de.ovgu.featureide.fm.core.FeatureDependencies;
 import de.ovgu.featureide.fm.core.base.IFeature;
 import de.ovgu.featureide.fm.core.base.IFeatureModel;
+import de.ovgu.featureide.fm.core.job.LongRunningMethod;
+import de.ovgu.featureide.fm.core.job.LongRunningWrapper;
+import de.ovgu.featureide.fm.core.job.monitor.IMonitor;
 import de.ovgu.featureide.fm.ui.handlers.base.ASelectionHandler;
 
 /**
@@ -47,7 +50,13 @@ public class ShowFeatureRelationsGraphCommandHandler extends ASelectionHandler {
 			project = (IProject) element;
 		}
 		final IFeatureProject featureProject = CorePlugin.getFeatureProject(project);
-		
+		LongRunningWrapper.getThread(new LongRunningMethod<Void>() {
+			@Override
+			public Void execute(IMonitor monitor) throws Exception {
+				ConfigAnalysisUtils.eval(featureProject);
+				return null;
+			}
+		}, "").schedule();
 		Shell shell = new Shell(Display.findDisplay(ShowFeatureRelationsGraphCommandHandler.thread));
 		shell.setText("Select feature");
 		shell.setSize(400, 200);
@@ -58,7 +67,7 @@ public class ShowFeatureRelationsGraphCommandHandler extends ASelectionHandler {
 		for (String f : featureList) {
 			list.add(f);
 		}
-		ConfigAnalysisUtils.eval(featureProject);
+		
 		list.addSelectionListener(new SelectionListener() {
 			
 			public void widgetSelected(SelectionEvent event) {
@@ -105,7 +114,7 @@ public class ShowFeatureRelationsGraphCommandHandler extends ASelectionHandler {
 	 */
 	
 	public static int showFrog(IFeatureProject featureProject, String featureCenter) throws CoreException {
-
+		
 		 //count interactions
 		fpgInteractions++;
 		 featureC = featureCenter;
@@ -206,7 +215,7 @@ public class ShowFeatureRelationsGraphCommandHandler extends ASelectionHandler {
       
 		Shell shell = new Shell(Display.getCurrent());
 		shell.setLayout(new FillLayout());
-		shell.setSize(1300, 1200);
+		shell.setSize(1700,1000);
 		shell.setText("Feature relations graph: " + featureCenter);
 		Browser browser;
 		try {

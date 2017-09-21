@@ -101,7 +101,7 @@ public class NFPGraphcommandHandler extends ASelectionHandler {
 		
 		Object[] featurePredicts = ConfigAnalysisUtils.computeFeaturePredictions(featureProject,featureCenter);
 		List<String> relatedFeatures = (List<String>)featurePredicts[0];
-		relatedFeatures.add(featureCenter);
+		//relatedFeatures.add(featureCenter);
 		//String featureCenter = "time";
 		StringBuffer data = new StringBuffer(" CENTRAL_NFP = \"");
 		data.append(nfpCenter);
@@ -133,7 +133,7 @@ public class NFPGraphcommandHandler extends ASelectionHandler {
 		System.out.println("nfp data is"+data);
 		Shell shell = new Shell(Display.getCurrent());
 		shell.setLayout(new FillLayout());
-		shell.setSize(900, 800);
+		shell.setSize(1700,1000);
 		
 		shell.setText("Non-functional property's graph: " + featureCenter );
 		Browser browser;
