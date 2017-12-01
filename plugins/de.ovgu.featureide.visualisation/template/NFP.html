@@ -19,23 +19,19 @@
   <body>
  
     <script type="text/javascript">
-
 		var width = 1300;
 		var height = 850;
 		var pi = Math.PI;
-
          var CENTRAL_NFP = "cost";
         var FEATURE_NAMES11 = ["Feature1", "Feature2", "Feature3","Feature4","Feature5", "Feature6","F7","F8","F9","F10","F11","F12","F13","F14","F15"];
     
          var PREDICTIONS11 = [ 2.0,0.2,0.25,0.3,0.354455256,0.4,0.45,0.5,0.55,0.6,0.65,0.8,1,0.2,2.0];
-
          var FORMALIZED_REQUIRES = [];
          var FORMALIZED_EXCLUDES = [];
           var NFP_VALUES = [];
           var NFP = [];
           var PREDICTIONS = [];
           var FEATURE_NAMES = [];
-
         var qualityCount = 0;
 		var quantityCount  = 0;
          
@@ -66,7 +62,6 @@
          var endAngleQuantity = quantityAngle+endAngleFP 
          var qualityAngle = qualityCount*(360/(FPLength+NFPLength));
          var endAngleQuality = qualityAngle+endAngleQuantity;
-
          var NODE_RADIUS = 10;
          var p=0,rad=0;
          var adjustLength=0,count=0,angle=0,circleCenter=[];
@@ -83,7 +78,6 @@
           	  endAngleQuality = 360;
           }
           
-
 		var arcs = [
 		       {"color":"#A9D18E","startAngle":0,"endAngle":endAngleFP,"radius":256},
 			   
@@ -115,38 +109,53 @@
 		];
 		var degree = Math.PI / 180; // just to convert the radian-numbers
 		var rectangleData = [
-                    { "rx": 170, "ry": 649, "height": 22, "width": 30, "color" : "#E6B9B8" },
-                    { "rx": 170, "ry": 676, "height": 22, "width": 30, "color" : "#B9CDE5" },
-					{ "rx": 170, "ry": 704, "height": 22, "width": 30, "color" : "#B7DEE8" },
-					{ "rx": 1050, "ry": 306, "height": 250, "width": 240, "color" : "#fff" },
-					
-					{ "rx": 1075, "ry": 363, "height": 23, "width": 25, "color" : "#D3C8DE" },
-					{ "rx": 1075, "ry": 390, "height": 23, "width": 25, "color" : "#BFB1CF" },
-					{ "rx": 1075, "ry": 417, "height": 23, "width": 25, "color" : "#A594BC" },
-					{ "rx": 1075, "ry": 444, "height": 23, "width": 25, "color" : "#927AAE" },
-					{ "rx": 1075, "ry": 471, "height": 23, "width": 25, "color" : "#7C609E" },
-					{ "rx": 1075, "ry": 498, "height": 23, "width": 25, "color" : "#695185" },
-					
-					{ "rx": 1236, "ry": 363, "height": 23, "width": 25, "color" : "#FEF9D6" },
-					{ "rx": 1236, "ry": 390, "height": 23, "width": 25, "color" : "#FDF3AD" },
-					{ "rx": 1236, "ry": 417, "height": 23, "width": 25, "color" : "#FBEB75" },
-					{ "rx": 1236, "ry": 444, "height": 23, "width": 25, "color" : "#F8DF24" },
-					{ "rx": 1236, "ry": 471, "height": 23, "width": 25, "color" : "#D9C007" },
-					{ "rx": 1236, "ry": 498, "height": 23, "width": 25, "color" : "#BCA600" },
-					];
-					
-		var legends = [
-		                {"name":"Funtional Features","x":208,"y":667,"size":"20px"},
-						{"name":"Quantitative NFPs","x":208,"y":694,"size":"20px"},
-						{"name":"Qualitative NFPs","x":208,"y":722,"size":"20px"},
-						{"name":"Zones","x":1050,"y":290,"size":"20px"},
-						{"name":"NFP","x":1065,"y":330,"size":"15px"},
-						{"name":"values","x":1060,"y":347,"size":"15px"},
-						{"name":"Feature","x":1216,"y":330,"size":"15px"},
-						{"name":"scores","x":1219,"y":347,"size":"15px"},
-						{"name":"Positive","x":1134,"y":378,"size":"15px"},
-						{"name":"Negative","x":1134,"y":514,"size":"15px"}
-					  ];
+						
+						{ "rx": 1050, "ry": 306, "height": 230, "width": 240, "color" : "#fff" },
+						{ "rx": 1050, "ry": 580, "height": 120, "width": 240, "color" : "#fff" },
+						{ "rx": 118, "ry": 630, "height": 120, "width": 240, "color" : "#fff" },
+						{ "rx": 132, "ry": 649, "height": 22, "width": 30, "color" : "#A9D18E" },
+						{ "rx": 132, "ry": 676, "height": 22, "width": 30, "color" : "#C5E0B4" },
+						{ "rx": 132, "ry": 704, "height": 22, "width": 30, "color" : "#E2F0D9" },
+						
+						{ "rx": 1075, "ry": 363, "height": 23, "width": 25, "color" : "#B8CAEA" },
+						{ "rx": 1075, "ry": 390, "height": 23, "width": 25, "color" : "#A1B9E3" },
+						{ "rx": 1075, "ry": 417, "height": 23, "width": 25, "color" : "#86A4DA" },
+						{ "rx": 1075, "ry": 444, "height": 23, "width": 25, "color" : "#7597D5" },
+						{ "rx": 1075, "ry": 471, "height": 23, "width": 25, "color" : "#5B84CD" },
+						{ "rx": 1075, "ry": 498, "height": 23, "width": 25, "color" : "#4674C6" },
+						
+						{ "rx": 1236, "ry": 363, "height": 23, "width": 25, "color" : "#FEF9D6" },
+						{ "rx": 1236, "ry": 390, "height": 23, "width": 25, "color" : "#FDF3AD" },
+						{ "rx": 1236, "ry": 417, "height": 23, "width": 25, "color" : "#FBEB75" },
+						{ "rx": 1236, "ry": 444, "height": 23, "width": 25, "color" : "#F8DF24" },
+						{ "rx": 1236, "ry": 471, "height": 23, "width": 25, "color" : "#D9C007" },
+						{ "rx": 1236, "ry": 498, "height": 23, "width": 25, "color" : "#BCA600" },
+						];
+						
+			var legends = [
+			                {"name":"Perspectives","x":119,"y":620,"size":"20px"},
+							{"name":"Funtional Features","x":170,"y":667,"size":"20px"},
+							{"name":"Qualitative NFPs","x":170,"y":694,"size":"20px"},
+							{"name":"Quantitative NFPs","x":170,"y":722,"size":"20px"},
+							{"name":"Zones","x":1050,"y":290,"size":"20px"},
+							{"name":"NFP","x":1065,"y":330,"size":"15px"},
+							{"name":"values","x":1060,"y":347,"size":"15px"},
+							{"name":"Feature","x":1216,"y":330,"size":"15px"},
+							{"name":"scores","x":1219,"y":347,"size":"15px"},
+							{"name":"Positive","x":1134,"y":378,"size":"15px"},
+							{"name":"Negative","x":1134,"y":514,"size":"15px"},
+							{"name":"Undefined","x":1109,"y":612,"size":"15px"},
+							{"name":"Required Formalized","x":1109,"y":642,"size":"15px"},
+							{"name":"Excluded Formalized","x":1109,"y":672,"size":"15px"},
+                            {"name":"Relation Types","x":1052,"y":567,"size":"20px"}							
+						  ];
+				// data for circles	in legend box	  
+				var jsonCircles = [
+						   { "x_axis": 1087, "y_axis": 607, "radius": 8, "fcolor" : "white","scolor" : "black" },
+						   { "x_axis": 1087, "y_axis": 637, "radius": 8, "fcolor" : "green","scolor" : "black"},
+						   { "x_axis": 1087, "y_axis": 667, "radius": 8, "fcolor" : "red", "scolor" : "black"}   
+						 ];	
+						  
 					  
 		// Appending SVG to the body
 		var svg = d3.select("body").append("svg")
@@ -155,7 +164,6 @@
 			.on('click', function() {
 			  console.log( d3.mouse(this) ) // log the mouse position
 			});
-
 		// Container for the arcs
 		var curves = svg.append("g")
 			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")").on('click', function() {
@@ -170,7 +178,6 @@
 			.enter().append("path")
 			.each(arcFunction);
 			
-
 		// Function called for each path appended to increase scale and iterate.
 		function arcFunction(d, i) {
 			var pathArc = d3.svg.arc()
@@ -179,7 +186,6 @@
 				.startAngle(function(d){return d.startAngle * degree;})
 				.endAngle(function(d){return d.endAngle * degree;})
 				.padAngle(0.02);
-
 			return d3.select(this)
 				.style("fill", function(d){return d.color;})
 				.attr("d", pathArc);
@@ -188,7 +194,6 @@
                                .data(rectangleData)
                                .enter()
                                .append("rect");
-
      var rectangleAttributes = rectangles
                             .attr("x", function (d) { return d.rx; })
                             .attr("y", function (d) { return d.ry; })
@@ -201,6 +206,14 @@
 							  .data(legends)
 							  .enter()
 							  .append("text");
+	       var legendCircles = svg.selectAll("circle")
+								.data(jsonCircles)
+								.enter().append("circle");
+				var lCircles = 	legendCircles.style("stroke",  function(d) { return d.scolor; })
+								.style("fill", function(d) { return d.fcolor; })
+								.attr("r", function(d) { return d.radius; })
+								.attr("cx", function (d) { return d.x_axis; })
+								.attr("cy", function (d) { return d.y_axis; });
 							  
 		var legendsAttributes = notation.attr('x', function (d) { return d.x; } )
 								  .attr('y', function (d) { return d.y; })
@@ -209,34 +222,29 @@
 								  .attr("font-family", "sans-serif")
                                   .attr("font-size", function (d) { return d.size; });
 								  
-		var lines = [{"x1":1158,"y1":387,"x2":1158,"y2":492,"class":"dashedLine"},
-	                 {"x1":1144,"y1":482,"x2":1158,"y2":497,"class":"normalLine"},
-					  {"x1":1169,"y1":482,"x2":1158,"y2":499,"class":"normalLine"}
-		            ];
+		var lines = [{"x1":1158,"y1":387,"x2":1158,"y2":500,"class":"dashedLine"},
+						 {"x1":1158,"y1":387,"x2":1143,"y2":402,"class":"normalLine"},
+						  {"x1":1158,"y1":387,"x2":1171,"y2":403,"class":"normalLine"}
+						];
 		var drawLine = svg.selectAll('line').data(lines).enter().append("line");
 		var lineAttributes = drawLine.attr("x1", function (d) { return d.x1; })
 								 .attr("x2", function (d) { return d.x2; })
 								 .attr("y1", function (d) { return d.y1; })
 								 .attr("y2", function (d) { return d.y2; })
 								 .attr("class",function (d) { return d.class; });
-
       curves.append("text")
 		  .attr('y', 0)
 		  .attr('x', -20)
 		  .text(CENTRAL_NFP);	
     
-
    insertProps( FEATURE_NAMES, PREDICTIONS );    
    //p = 0;
   //insertProps( NFP, NFP_VALUES ); 
  
-
    function insertProps(nodes,propsValues) {   
    
       for (var i = 0; i < nodes.length; i++) {
-
       	        var val = propsValues[i]; 
-
 					if(val>=0 && val<=0.17) {
                         if(nodes == FEATURE_NAMES) {
                         circleCenter = createCenter(212,nodes,15,1,0.7,1,-1);
@@ -283,15 +291,12 @@
                 } else {
                     centerX= circleCenter[0]; 
                     centerY= circleCenter[1];  
-
                    insertData(centerX,centerY,"white","black","end",nodes,nodes[i],-16,2,'black');
                  }
                					
 		};
 	 
    }	
-
-
   function createCenter(rad,numNodes,len,val,mul,locationX,locationY) {
 		     	      if( p==0){
                          adjustLength= len;
@@ -301,7 +306,6 @@
                          t=0;
                        }
                    
-
                   	   if( numNodes === NFP ) {
                   	   	rotation =  rotation +2;
                   	   	 angle = p*(Math.PI/180)*rotation;
@@ -316,19 +320,15 @@
 		                 //angle = (p / 11*val) * Math.PI*mul; 
                         centerX = (rad * Math.sin(angle)+adjustLength)*locationX;
                         centerY = (rad * Math.cos(angle)+t)*locationY ; 
-
                   	     rotation--;
                   	   	}
 		                
                    
                   p+=1; 
                 return [centerX,centerY];         
-
    }
    var textAngle = -3;
    function insertData(cx,cy,fillColor,borderColor,anchor,nodes,propertyName,x,y,color) {
-
-
    	           var props = FEATURE_NAMES.concat(NFP);
                   if(cx !== 0){
 					curves.append("circle")
@@ -337,7 +337,6 @@
 					  .attr('r', 6)
 					  .style("fill",fillColor)
 					  .style("stroke",borderColor);
-
 				   curves
 				      .append("text")
 					  .attr("x", cx+x)
@@ -354,7 +353,6 @@
                 if(FEATURE_NAMES.indexOf(propertyName) > -1){
 					  insertConstraints(cx,cy,propertyName);
 				}	  
-
 	}
                
     function insertConstraints(cx,cy,propertyName) {
